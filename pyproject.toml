@@ -1,0 +1,21 @@
+[project]
+name = "suanlitong"
+version = "0.1.0"
+description = "算力通 — 让算力像自来水一样，扭开即用"
+requires-python = ">=3.11"
+license = {text = "Proprietary"}
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true

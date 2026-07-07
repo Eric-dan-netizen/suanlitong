@@ -1,0 +1,71 @@
+# ============================================================
+# 算力通 · .gitignore
+# ============================================================
+
+# --- macOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# --- Obsidian ---
+.obsidian/workspace.json
+.obsidian/workspace-mobile.json
+.trash/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+.venv/
+venv/
+env/
+
+# --- Virtual Environment ---
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# --- IDE ---
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# --- Environment & Secrets ---
+.env
+.env.local
+.env.*.local
+*.key
+*.pem
+credentials.json
+
+# --- Node (future) ---
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Temp files ---
+*.tmp
+*.temp
+*.bak
+*.log
+
+# --- Large binaries (keep in separate storage) ---
+# Uncomment if PPT files get too large
+# *.pptx
+
+# --- OS ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini

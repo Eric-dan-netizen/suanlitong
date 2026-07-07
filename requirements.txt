@@ -1,0 +1,19 @@
+# ============================================================
+# 算力通 · Python Dependencies
+# ============================================================
+
+# PPT generation (Pitch Deck)
+python-pptx>=0.6.21
+
+# Future: Backend API
+# fastapi>=0.100.0
+# uvicorn>=0.23.0
+
+# Future: Cloud SDK adapters
+# alibabacloud-sdk
+# huaweicloud-sdk
+# tencentcloud-sdk-python
+
+# Future: Data & Analytics
+# pandas>=2.0.0
+# httpx>=0.24.0
