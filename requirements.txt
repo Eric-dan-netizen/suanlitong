@@ -6,14 +6,20 @@
 python-pptx>=0.6.21
 
 # Future: Backend API
-# fastapi>=0.100.0
-# uvicorn>=0.23.0
+fastapi>=0.100.0
+uvicorn>=0.23.0
 
 # Future: Cloud SDK adapters
-# alibabacloud-sdk
-# huaweicloud-sdk
-# tencentcloud-sdk-python
+alibabacloud-ecs20140526
+huaweicloudsdkecs
+tencentcloud-sdk-python
 
 # Future: Data & Analytics
-# pandas>=2.0.0
-# httpx>=0.24.0
+pandas>=2.0.0
+httpx>=0.24.0
+
+# ── Device Agent ─────────────────────────────────────
+psutil>=5.9.0
+docker>=7.0.0
+python-dotenv>=1.0.0
+GPUtil>=1.4.0               # NVIDIA GPU 监控（可选，仅 Linux/Windows）
