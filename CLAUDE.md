@@ -66,8 +66,58 @@
 - **Commit：** Conventional Commits（`feat:`, `fix:`, `docs:`, `chore:`）
 - **API 版本：** 所有接口以 `/api/v1/` 为前缀
 - **环境变量：** `.env` 文件管理（不提交），模板在 `.env.example`
-- **Python 代码风格：** Black + isort + mypy
+- **Python 代码风格：** ruff（lint + format），line-length=100，src/ 严格 / scripts/ 宽松
 - **前端代码风格：** ESLint + Prettier
+
+## 三层质量防线（全局框架 → 本项目落地）
+
+遵循全局工程质量框架 [[three_layer_quality_defense]]，本项目的具体配置：
+
+### 第一层：pre-commit hook
+
+`.pre-commit-config.yaml`:
+```yaml
+repos:
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.11.0
+    hooks:
+      - id: ruff
+        args: [--fix, src/]
+      - id: ruff-format
+```
+
+安装：`pre-commit install`
+
+效果：每次 `git commit` 自动跑 ruff --fix src/，不过不提交。
+
+### 第二层：CI 分层检查
+
+`.github/workflows/ci.yml` 改为：
+```yaml
+jobs:
+  lint:
+    steps:
+      - run: ruff check src/                          # 严格，失败 block
+      - run: ruff check scripts/ --select E9,F82      # 宽松，只抓语法错误
+      - run: pip install --dry-run -r requirements.txt # 验证依赖包名
+  test:
+    needs: lint
+    steps:
+      - run: pip install -r requirements-dev.txt
+      - run: pytest -v src/
+```
+
+### 第三层：Agent 自检指令
+
+每个 Agent 产出代码后必须执行：
+```bash
+ruff check --fix src/ && pytest -v src/
+```
+
+Agent 定义文件中包含此指令（见 `.claude/agents/*.md`）。新增依赖时必须先验证包名：
+```bash
+pip install --dry-run <package> 2>&1 | grep -v "already satisfied"
+```
 
 ## 当前状态
 
