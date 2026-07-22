@@ -71,3 +71,9 @@ yarn-error.log*
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# --- SQLite ---
+*.db
+*.db-shm
+*.db-wal
+*.db-journal
