@@ -1,0 +1,34 @@
+# 算力通 · 设备 Agent 镜像（GPU 任务执行环境）
+FROM nvidia/cuda:12.4-runtime-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /agent
+
+# 系统依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.11 \
+    python3-pip \
+    curl \
+    && rm -rf /var/lib/apt/lists/* \
+    && ln -sf /usr/bin/python3.11 /usr/bin/python
+
+# Python 依赖
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# TODO: 后续阶段启用以下 AI 框架
+# RUN pip install --no-cache-dir \
+#     torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124 \
+#     jupyter \
+#     vllm
+
+# 源码
+COPY src/agent/ src/agent/
+
+# 非 root 运行
+RUN useradd -m -u 1000 agent && chown -R agent:agent /agent
+USER agent
+
+CMD ["python", "src/agent/daemon.py"]

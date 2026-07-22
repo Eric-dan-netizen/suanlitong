@@ -1,0 +1,62 @@
+# 算力通 · 本地开发环境
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./suanlitong.db
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+    volumes:
+      - ./src:/app/src:ro
+      - suanlitong_data:/app/data
+    command: uvicorn src.backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+    networks:
+      - suanlitong
+
+  # TODO: 前端就绪后取消注释
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   environment:
+  #     - VITE_API_BASE_URL=http://localhost:8000
+  #   depends_on:
+  #     - backend
+  #   networks:
+  #     - suanlitong
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - suanlitong
+
+  # TODO: 生产环境切换为 PostgreSQL，MVP 阶段用 SQLite
+  # postgres:
+  #   image: postgres:16-alpine
+  #   ports:
+  #     - "5432:5432"
+  #   environment:
+  #     - POSTGRES_USER=suanlitong
+  #     - POSTGRES_PASSWORD=suanlitong
+  #     - POSTGRES_DB=suanlitong
+  #   volumes:
+  #     - pg_data:/var/lib/postgresql/data
+  #   networks:
+  #     - suanlitong
+
+volumes:
+  suanlitong_data:
+
+networks:
+  suanlitong:
+    driver: bridge

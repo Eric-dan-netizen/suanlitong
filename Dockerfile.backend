@@ -1,0 +1,24 @@
+# 算力通 · 后端 FastAPI 服务镜像
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# 系统依赖
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Python 依赖（分层缓存）
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# 源码
+COPY src/ src/
+COPY pyproject.toml .
+
+# 非 root 运行
+RUN useradd -m -u 1000 suanlitong && chown -R suanlitong:suanlitong /app
+USER suanlitong
+
+EXPOSE 8000
+CMD ["uvicorn", "src.backend.app.main:app", "--host", "0.0.0.0", "--port", "8000"]
