@@ -61,9 +61,11 @@ yarn-error.log*
 *.bak
 *.log
 
-# --- Large binaries (keep in separate storage) ---
-# Uncomment if PPT files get too large
-# *.pptx
+# --- 融资文档（个人用途，不入代码仓库） ---
+*.pptx
+*.ppt
+*.docx
+*.doc
 
 # --- OS ---
 Thumbs.db
