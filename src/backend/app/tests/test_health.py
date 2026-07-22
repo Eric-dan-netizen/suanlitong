@@ -12,12 +12,12 @@ from fastapi.testclient import TestClient
 # ── 设置测试数据库路径（必须在导入 app 前） ────────
 _tmpdir = tempfile.mkdtemp(prefix="suanlitong_test_")
 _test_db_path = str(Path(_tmpdir) / "test.db")
-import os as _os
+import os as _os  # noqa: E402
 
 _os.environ["DATABASE_URL"] = f"sqlite:///{_test_db_path}"
 
-from src.backend.app.db import get_db, init_db
-from src.backend.app.main import app
+from src.backend.app.db import get_db, init_db  # noqa: E402
+from src.backend.app.main import app  # noqa: E402
 
 # ── SQL 模板 ──────────────────────────
 
