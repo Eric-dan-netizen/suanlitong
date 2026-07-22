@@ -36,7 +36,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "6380:6379"
     networks:
       - suanlitong
 
@@ -54,8 +54,28 @@ services:
   #   networks:
   #     - suanlitong
 
+
+  agent:
+    build:
+      context: .
+      dockerfile: Dockerfile.agent
+      target: dev
+    environment:
+      - DATABASE_URL=sqlite:///./suanlitong.db
+      - HEARTBEAT_HOST=backend
+      - HEARTBEAT_PORT=9999
+    volumes:
+      - ./src/agent:/agent/src/agent:ro
+      - /var/run/docker.sock:/var/run/docker.sock
+      - agent_data:/agent/data
+    depends_on:
+      - backend
+    networks:
+      - suanlitong
+
 volumes:
   suanlitong_data:
+  agent_data:
 
 networks:
   suanlitong:
