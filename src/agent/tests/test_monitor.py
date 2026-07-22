@@ -81,8 +81,9 @@ class TestGetCpuPercent:
             assert result == 45.7
 
     def test_import_error_fallback(self):
-        with patch.dict("sys.modules"):
-            sys.modules.pop("psutil", None)
+        mock_psutil = MagicMock()
+        mock_psutil.cpu_percent.side_effect = ImportError
+        with patch.dict("sys.modules", {"psutil": mock_psutil}):
             result = _get_cpu_percent()
             assert result == 0.0
 
@@ -113,8 +114,9 @@ class TestGetRamPercent:
             assert result == 0.0
 
     def test_import_error_fallback(self):
-        with patch.dict("sys.modules"):
-            sys.modules.pop("psutil", None)
+        mock_psutil = MagicMock()
+        mock_psutil.virtual_memory.side_effect = ImportError
+        with patch.dict("sys.modules", {"psutil": mock_psutil}):
             result = _get_ram_percent()
             assert result == 0.0
 

@@ -832,7 +832,9 @@ add_line(slide, Inches(0), H-Pt(6), W, Pt(6), ACCENT)
 # ══════════════════════════════════════════════════════
 # SAVE
 # ══════════════════════════════════════════════════════
-output_path = "/Users/apple/算力通/docs/pitch/算力通_投资人深度分析.pptx"
+import os as _os
+_os.makedirs("docs/pitch", exist_ok=True)
+output_path = "docs/pitch/算力通_投资人深度分析.pptx"
 prs.save(output_path)
 print(f"✅ 投资人深度分析 PPT 已生成: {output_path}")
 print(f"   Slides: {len(prs.slides)}")

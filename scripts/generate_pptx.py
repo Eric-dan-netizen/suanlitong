@@ -899,7 +899,9 @@ add_line(slide, Inches(0), H - Pt(4), W, Pt(4), ACCENT)
 # ══════════════════════════════════════════════════════
 # SAVE
 # ══════════════════════════════════════════════════════
-output_path = "/Users/apple/算力通/算力通_种子轮_Pitch_Deck.pptx"
+import os as _os
+_os.makedirs("docs/pitch", exist_ok=True)
+output_path = "docs/pitch/算力通_种子轮_Pitch_Deck.pptx"
 prs.save(output_path)
 print(f"✅ Pitch Deck 已生成: {output_path}")
 print(f"   Slides: {len(prs.slides)}")

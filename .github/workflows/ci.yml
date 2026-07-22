@@ -30,8 +30,7 @@ jobs:
       - run: pip install ruff
       - run: ruff check scripts/ --select E9,F82
         # 宽松模式：只抓语法/逻辑硬错误，E501/E741 等不阻塞
-      - run: ruff check scripts/ --select E,N,W
-        continue-on-error: true
+      - run: ruff check scripts/ --select E,N,W || true
         # 风格类问题 warn 但不 block
 
   # ── 第三道门：依赖包名验证 ──────────────────────

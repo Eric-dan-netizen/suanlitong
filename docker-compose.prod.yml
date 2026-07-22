@@ -1,0 +1,78 @@
+version: "3.8"
+
+services:
+  nginx:
+    image: registry.cn-beijing.aliyuncs.com/suanlitong/nginx:${VERSION:-latest}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./certbot/www:/var/www/certbot:ro
+      - ./certbot/conf:/etc/letsencrypt:ro
+    depends_on:
+      - backend
+    restart: always
+
+  backend:
+    image: registry.cn-beijing.aliyuncs.com/suanlitong/backend:${VERSION:-latest}
+    expose:
+      - "8000"
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+      - ALIYUN_ACCESS_KEY_ID=${ALIYUN_ACCESS_KEY_ID:-}
+      - ALIYUN_ACCESS_KEY_SECRET=${ALIYUN_ACCESS_KEY_SECRET:-}
+      - HUAWEI_ACCESS_KEY_ID=${HUAWEI_ACCESS_KEY_ID:-}
+      - HUAWEI_ACCESS_KEY_SECRET=${HUAWEI_ACCESS_KEY_SECRET:-}
+      - TENCENT_SECRET_ID=${TENCENT_SECRET_ID:-}
+      - TENCENT_SECRET_KEY=${TENCENT_SECRET_KEY:-}
+      - APP_HOST=0.0.0.0
+      - APP_PORT=8000
+    command: uvicorn src.backend.app.main:app --host 0.0.0.0 --port 8000 --workers 4
+    restart: always
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  redis:
+    image: redis:7-alpine
+    expose:
+      - "6379"
+    volumes:
+      - redis_data:/data
+    restart: always
+
+  postgres:
+    image: postgres:16-alpine
+    expose:
+      - "5432"
+    environment:
+      - POSTGRES_USER=suanlitong
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-suanlitong}
+      - POSTGRES_DB=suanlitong
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    restart: always
+
+  celery-worker:
+    image: registry.cn-beijing.aliyuncs.com/suanlitong/celery-worker:${VERSION:-latest}
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+    command: celery -A src.backend.app.tasks worker --loglevel=info --concurrency=2
+    restart: always
+
+  celery-beat:
+    image: registry.cn-beijing.aliyuncs.com/suanlitong/celery-worker:${VERSION:-latest}
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+      - REDIS_URL=${REDIS_URL}
+    command: celery -A src.backend.app.tasks beat --loglevel=info
+    restart: always
+
+volumes:
+  redis_data:
+  pg_data:

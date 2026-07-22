@@ -10,8 +10,8 @@ fastapi>=0.100.0
 uvicorn>=0.23.0
 
 # Future: Cloud SDK adapters
-# alibabacloud-ecs20140526  # TODO: confirm pypi name
-# huaweicloudsdkecs  # TODO: use huaweicloud-sdk-ecs
+# alibabacloud-ecs20140526  # TODO: confirm PyPI name
+# huaweicloud-sdk-ecs  # TODO: uncomment when ready
 tencentcloud-sdk-python
 
 # Future: Data & Analytics

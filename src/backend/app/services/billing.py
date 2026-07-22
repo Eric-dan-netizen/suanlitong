@@ -13,7 +13,7 @@ from ..db import get_db
 
 logger = logging.getLogger(__name__)
 
-# ── 定价表（元/秒） ──────────────────────────────────
+# ── 定价表（元/秒） ────────────────────
 # TODO: 后续从 price_snapshots 表动态读取，或从云 API 实时获取
 
 GPU_HOURLY_RATES: dict[str, float] = {
@@ -58,7 +58,7 @@ def deduct_balance(user_id: int, amount: float) -> bool:
         return True
 
 
-# ── 欠费检查（骨架） ─────────────────────────────────
+# ── 欠费检查（骨架） ───────────────────
 
 def check_arrears(user_id: int) -> bool:
     """检查用户是否欠费（余额 <= 0）。
