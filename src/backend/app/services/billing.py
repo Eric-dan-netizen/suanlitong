@@ -8,7 +8,6 @@
 """
 
 import logging
-from datetime import datetime
 
 from ..db import get_db
 
@@ -25,40 +24,30 @@ GPU_HOURLY_RATES: dict[str, float] = {
 
 
 def calculate_cost(gpu_type: str, duration_seconds: float) -> float:
-    """计算 GPU 实例使用费用。
-
-    Args:
-        gpu_type: GPU 型号
-        duration_seconds: 运行时长（秒）
-
-    Returns:
-        费用（元），保留 4 位小数
-    """
+    """计算 GPU 实例使用费用。"""
     hourly = GPU_HOURLY_RATES.get(gpu_type.upper(), 0.0)
-    cost = (hourly / 3600.0) * duration_seconds
-    return round(cost, 4)
+    return round((hourly / 3600.0) * duration_seconds, 4)
 
 
 def deduct_balance(user_id: int, amount: float) -> bool:
-    """从用户余额中扣费（使用数据库事务）。
+    """从用户余额中扣费（数据库事务）。
 
-    Args:
-        user_id: 用户 ID
-        amount: 扣费金额（元）
-
-    Returns:
-        True 表示扣费成功；False 表示余额不足
-
+    Returns: True 扣费成功 / False 余额不足。
     TODO: 对接真实用户认证后启用
     """
     with get_db() as conn:
-        cursor = conn.execute("SELECT balance FROM users WHERE id = ?", (user_id,))
-        row = cursor.fetchone()
+        row = conn.execute(
+            "SELECT balance FROM users WHERE id = ?", (user_id,)
+        ).fetchone()
         if not row:
             logger.warning("deduct_balance: user %d not found", user_id)
             return False
         if row["balance"] < amount:
-            logger.info("deduct_balance: user %d 余额不足 (%.4f < %.4f)", user_id, row["balance"], amount)
+            logger.info(
+                "deduct_balance: user %d 余额不足 "
+                "(balance=%.4f < amount=%.4f)",
+                user_id, row["balance"], amount,
+            )
             return False
 
         conn.execute(
@@ -77,7 +66,9 @@ def check_arrears(user_id: int) -> bool:
     TODO: 对接真实用户认证后启用
     """
     with get_db() as conn:
-        row = conn.execute("SELECT balance FROM users WHERE id = ?", (user_id,)).fetchone()
+        row = conn.execute(
+            "SELECT balance FROM users WHERE id = ?", (user_id,)
+        ).fetchone()
         if row is None:
             return False
         return row["balance"] <= 0

@@ -14,11 +14,8 @@
 
 import abc
 import argparse
-import os
 import sys
-import time
 from dataclasses import dataclass
-from typing import Optional
 
 # ── Data Models ──────────────────────────────────────
 
@@ -281,7 +278,6 @@ def render_table(results: list[GPUPrice]) -> str:
 
     min_price = min(r.on_demand_price for r in results)
     for r in results:
-        row_str = f"{' ' * 6}"  # indent for readability
         cells = [str(c) for c in r.as_tuple()]
         line = fmt_row(cells, col_widths)
         if r.on_demand_price == min_price:

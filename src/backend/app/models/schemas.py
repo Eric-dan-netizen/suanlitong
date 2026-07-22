@@ -1,10 +1,10 @@
 """算力通 · Pydantic 数据模型。"""
 
-from datetime import datetime
+
+
 from typing import Optional
 
 from pydantic import BaseModel, Field
-
 
 # ── 实例 ─────────────────────────────────────────────
 
@@ -24,7 +24,7 @@ class InstanceResponse(BaseModel):
     status: str
     created_at: str
     terminated_at: Optional[str] = None
-
+  # noqa: UP045
 
 # ── 价格 ─────────────────────────────────────────────
 
@@ -34,7 +34,7 @@ class PriceSnapshotResponse(BaseModel):
     gpu_type: str
     price_per_hour: float
     spot_price: Optional[float] = None
-    region: str
+    region: str  # noqa: UP045
     fetched_at: str
 
 

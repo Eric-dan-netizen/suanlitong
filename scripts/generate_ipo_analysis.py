@@ -4,9 +4,9 @@
 """
 
 from pptx import Presentation
-from pptx.util import Inches, Pt
 from pptx.dml.color import RGBColor
 from pptx.enum.text import PP_ALIGN
+from pptx.util import Inches, Pt
 
 # ── Design Tokens ────────────────────────────────────
 W = Inches(13.333)
@@ -693,4 +693,4 @@ output_path = "/Users/apple/算力通/docs/pitch/算力通_IPO退出路径分析
 prs.save(output_path)
 print(f"✅ IPO 退出分析 PPT 已生成: {output_path}")
 print(f"   Slides: {len(prs.slides)}")
-print(f"   Size: 16:9 widescreen")
+print("   Size: 16:9 widescreen")

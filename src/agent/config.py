@@ -9,8 +9,6 @@ from __future__ import annotations
 import os
 import uuid
 from pathlib import Path
-from typing import Optional
-
 
 # ── 工作目录 / 文件路径 ──────────────────────────────
 
@@ -45,7 +43,7 @@ def _load_dotenv() -> None:
     if not env_file.exists():
         return
     try:
-        with open(env_file, "r", encoding="utf-8") as fh:
+        with open(env_file, encoding="utf-8") as fh:
             for line in fh:
                 line = line.strip()
                 if not line or line.startswith("#"):
@@ -117,7 +115,7 @@ class Config:
         self.agent_home: Path = AGENT_HOME
 
         # ── 可选：任务服务器地址 ─────────────────────
-        self.api_server: Optional[str] = os.getenv("API_SERVER") or None
+        self.api_server: str | None = os.getenv("API_SERVER") or None
 
     def __repr__(self) -> str:
         return (

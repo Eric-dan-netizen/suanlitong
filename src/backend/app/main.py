@@ -13,7 +13,6 @@ from .config import APP_VERSION
 from .db import init_db
 from .routers import instances, prices
 
-
 # ── 生命周期 ────────────────────────────────────────
 
 @asynccontextmanager

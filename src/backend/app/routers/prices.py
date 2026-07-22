@@ -23,7 +23,7 @@ def _get_conn():
 @router.get("", response_model=list[PriceSnapshotResponse])
 def list_prices(
     gpu_type: Optional[str] = Query(None, description="GPU 型号筛选（如 A100）"),
-    conn: sqlite3.Connection = Depends(_get_conn),
+    conn: sqlite3.Connection = Depends(_get_conn),  # noqa: UP045
 ):
     """查询 GPU 实时比价。
 

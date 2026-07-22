@@ -4,10 +4,9 @@
 """
 
 from pptx import Presentation
-from pptx.util import Inches, Pt, Emu, Cm
 from pptx.dml.color import RGBColor
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
-from pptx.oxml.ns import qn
+from pptx.enum.text import PP_ALIGN
+from pptx.util import Inches, Pt
 
 # ── Design Tokens ────────────────────────────────────
 W = Inches(13.333)
@@ -837,4 +836,4 @@ output_path = "/Users/apple/算力通/docs/pitch/算力通_投资人深度分析
 prs.save(output_path)
 print(f"✅ 投资人深度分析 PPT 已生成: {output_path}")
 print(f"   Slides: {len(prs.slides)}")
-print(f"   Size: 16:9 widescreen (13.33\" × 7.5\")")
+print("   Size: 16:9 widescreen (13.33\" × 7.5\")")

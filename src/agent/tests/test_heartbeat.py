@@ -6,13 +6,12 @@
 from __future__ import annotations
 
 import json
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 import pytest
 
 from src.agent.config import Config
 from src.agent.heartbeat import MAX_PAYLOAD_BYTES, HeartbeatClient
-
 
 # ── Fixtures ─────────────────────────────────────────
 

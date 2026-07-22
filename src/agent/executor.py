@@ -7,9 +7,7 @@
 from __future__ import annotations
 
 import logging
-import os
-import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -52,7 +50,7 @@ class Executor:
         self._cpu_limit_pct = cpu_limit_percent
         self._mem_limit_pct = mem_limit_percent
         self._client: Any = None          # docker.DockerClient
-        self._containers: Dict[str, str] = {}  # task_id → container_id
+        self._containers: dict[str, str] = {}  # task_id → container_id
         self._paused: bool = False
 
     # ── 初始化 ───────────────────────────────────────
@@ -79,7 +77,7 @@ class Executor:
 
     # ── 资源计算 ─────────────────────────────────────
 
-    def _compute_resources(self) -> Dict[str, Any]:
+    def _compute_resources(self) -> dict[str, Any]:
         """根据主机资源和配置限制计算容器资源配额。
 
         Returns:
@@ -111,9 +109,9 @@ class Executor:
 
     # ── 任务执行 ─────────────────────────────────────
 
-    def run_task(self, task_id: str, image: str, command: Optional[str] = None,
-                 env: Optional[Dict[str, str]] = None,
-                 volumes: Optional[Dict[str, Dict[str, str]]] = None) -> str:
+    def run_task(self, task_id: str, image: str, command: str | None = None,
+                 env: dict[str, str] | None = None,
+                 volumes: dict[str, dict[str, str]] | None = None) -> str:
         """启动一个任务容器。
 
         Args:
@@ -177,7 +175,7 @@ class Executor:
 
     # ── 暂停 / 恢复 ──────────────────────────────────
 
-    def pause_all(self) -> List[str]:
+    def pause_all(self) -> list[str]:
         """暂停所有正在运行的任务容器。
 
         当 is_user_active=True 时由 daemon 调用。
@@ -188,7 +186,7 @@ class Executor:
         if self._paused:
             return []
 
-        paused_tasks: List[str] = []
+        paused_tasks: list[str] = []
         client = self._client
         if client is None:
             return paused_tasks
@@ -212,7 +210,7 @@ class Executor:
 
         return paused_tasks
 
-    def resume_all(self) -> List[str]:
+    def resume_all(self) -> list[str]:
         """恢复所有被暂停的任务容器。
 
         Returns:
@@ -221,7 +219,7 @@ class Executor:
         if not self._paused:
             return []
 
-        resumed_tasks: List[str] = []
+        resumed_tasks: list[str] = []
         client = self._client
         if client is None:
             return resumed_tasks
@@ -250,7 +248,7 @@ class Executor:
         return self._paused
 
     @property
-    def active_tasks(self) -> List[str]:
+    def active_tasks(self) -> list[str]:
         return list(self._containers.keys())
 
     # ── 关闭 ─────────────────────────────────────────

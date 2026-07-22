@@ -2,8 +2,8 @@
 
 import sqlite3
 import threading
+from collections.abc import Generator
 from contextlib import contextmanager
-from typing import Generator
 
 from .config import DATABASE_URL, _db_path_from_url
 

@@ -3,13 +3,12 @@
 种子轮融资路演 PPTX 自动生成
 """
 
+
 from pptx import Presentation
-from pptx.util import Inches, Pt, Emu, Cm
 from pptx.dml.color import RGBColor
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
-from pptx.enum.shapes import MSO_CONNECTOR_TYPE
+from pptx.enum.text import MSO_ANCHOR, PP_ALIGN
 from pptx.oxml.ns import qn
-import copy
+from pptx.util import Inches, Pt
 
 # ── Global Design Tokens ──────────────────────────────
 W = Inches(13.333)  # 16:9 widescreen
@@ -904,4 +903,4 @@ output_path = "/Users/apple/算力通/算力通_种子轮_Pitch_Deck.pptx"
 prs.save(output_path)
 print(f"✅ Pitch Deck 已生成: {output_path}")
 print(f"   Slides: {len(prs.slides)}")
-print(f"   Size: 16:9 widescreen")
+print("   Size: 16:9 widescreen")

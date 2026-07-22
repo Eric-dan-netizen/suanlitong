@@ -10,7 +10,7 @@ import json
 import logging
 import socket
 import time
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .config import Config
 
@@ -43,8 +43,8 @@ class HeartbeatClient:
 
     def send(
         self,
-        usage: Dict[str, Any],
-        current_task: Optional[str] = None,
+        usage: dict[str, Any],
+        current_task: str | None = None,
     ) -> bool:
         """发送一次心跳。
 
@@ -55,7 +55,7 @@ class HeartbeatClient:
         Returns:
             True 如果发送成功，False 如果失败。
         """
-        payload: Dict[str, Any] = {
+        payload: dict[str, Any] = {
             "device_id": self._device_id,
             "usage": usage,
             "current_task": current_task,

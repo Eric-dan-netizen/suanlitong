@@ -20,10 +20,10 @@ import signal
 import sys
 import threading
 import time
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .config import Config
-from .executor import DockerUnavailableError, Executor, ExecutorError
+from .executor import DockerUnavailableError, Executor
 from .heartbeat import HeartbeatClient
 from .monitor import get_system_usage
 
@@ -54,9 +54,9 @@ class AgentDaemon:
         self.running = False
 
         # 子模块（惰性初始化）
-        self._heartbeat: Optional[HeartbeatClient] = None
-        self._executor: Optional[Executor] = None
-        self._latest_usage: Dict[str, Any] = {}
+        self._heartbeat: HeartbeatClient | None = None
+        self._executor: Executor | None = None
+        self._latest_usage: dict[str, Any] = {}
         self._usage_lock = threading.Lock()
 
         # 信号处理
@@ -196,7 +196,7 @@ class AgentDaemon:
                     usage = dict(self._latest_usage)
 
                 executor = self._executor
-                current_task: Optional[str] = None
+                current_task: str | None = None
                 if executor and executor.active_tasks:
                     current_task = executor.active_tasks[0]
 

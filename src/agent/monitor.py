@@ -9,14 +9,14 @@ from __future__ import annotations
 import logging
 import platform
 import subprocess
-from typing import Any, Dict
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
 # ── 公开接口 ─────────────────────────────────────────
 
 
-def get_system_usage(idle_threshold: int = 30) -> Dict[str, Any]:
+def get_system_usage(idle_threshold: int = 30) -> dict[str, Any]:
     """采集当前系统资源使用情况。
 
     Args:

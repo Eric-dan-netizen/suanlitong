@@ -13,13 +13,12 @@ from fastapi.testclient import TestClient
 _tmpdir = tempfile.mkdtemp(prefix="suanlitong_test_")
 _test_db_path = str(Path(_tmpdir) / "test.db")
 
-import src.backend.app.config as _cfg
+import src.backend.app.config as _cfg  # noqa: E402
 
 _cfg.DATABASE_URL = f"sqlite:///{_test_db_path}"
 
 from src.backend.app.db import get_db, init_db  # noqa: E402
 from src.backend.app.main import app  # noqa: E402
-
 
 # ── Fixtures ─────────────────────────────────────────
 
@@ -75,11 +74,11 @@ class TestPrices:
         """?gpu_type=A100 只返回该型号。"""
         with get_db() as conn:
             conn.execute(
-                "INSERT INTO price_snapshots (provider, gpu_type, price_per_hour, spot_price, region) "
+                "INSERT INTO price_snapshots (provider, gpu_type, price_per_hour, spot_price, region) "  # noqa: E501
                 "VALUES ('阿里云', 'A100', 28.50, 12.80, 'cn-beijing')"
             )
             conn.execute(
-                "INSERT INTO price_snapshots (provider, gpu_type, price_per_hour, spot_price, region) "
+                "INSERT INTO price_snapshots (provider, gpu_type, price_per_hour, spot_price, region) "  # noqa: E501
                 "VALUES ('华为云', 'H100', 48.00, 24.00, 'cn-north-4')"
             )
 
@@ -94,11 +93,11 @@ class TestPrices:
         """同一 provider+gpu_type 只返回最新数据。"""
         with get_db() as conn:
             conn.execute(
-                "INSERT INTO price_snapshots (provider, gpu_type, price_per_hour, spot_price, region) "
+                "INSERT INTO price_snapshots (provider, gpu_type, price_per_hour, spot_price, region) "  # noqa: E501
                 "VALUES ('阿里云', 'A100', 30.00, 15.00, 'cn-beijing')"
             )
             conn.execute(
-                "INSERT INTO price_snapshots (provider, gpu_type, price_per_hour, spot_price, region) "
+                "INSERT INTO price_snapshots (provider, gpu_type, price_per_hour, spot_price, region) "  # noqa: E501
                 "VALUES ('阿里云', 'A100', 26.00, 11.00, 'cn-beijing')"
             )
 
@@ -130,8 +129,10 @@ class TestInstances:
 
     def test_list_returns_instances(self, client):
         """GET → 返回所有活跃实例。"""
-        client.post("/api/v1/instances", json={"provider": "阿里云", "gpu_type": "A100", "image": "img1"})
-        client.post("/api/v1/instances", json={"provider": "华为云", "gpu_type": "H100", "image": "img2"})
+        client.post("/api/v1/instances",
+            json={"provider": "阿里云", "gpu_type": "A100", "image": "img1"})
+        client.post("/api/v1/instances",
+            json={"provider": "华为云", "gpu_type": "H100", "image": "img2"})
 
         resp = client.get("/api/v1/instances")
         assert resp.status_code == 200

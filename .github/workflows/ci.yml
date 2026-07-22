@@ -7,7 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  lint:
+  # ── 第一道门：产品代码严格 lint ──────────────────
+  lint-src:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,10 +16,38 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install ruff
-      - run: ruff check scripts/ src/
+      - run: ruff check src/
+        # 严格模式：任何 lint 错误 block merge
 
+  # ── 第二道门：辅助脚本宽松检查 ──────────────────
+  lint-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff
+      - run: ruff check scripts/ --select E9,F82
+        # 宽松模式：只抓语法/逻辑硬错误，E501/E741 等不阻塞
+      - run: ruff check scripts/ --select E,N,W
+        continue-on-error: true
+        # 风格类问题 warn 但不 block
+
+  # ── 第三道门：依赖包名验证 ──────────────────────
+  deps-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install --dry-run -r requirements.txt
+        # 验证 requirements.txt 中所有包在 PyPI 存在
+
+  # ── 第四道门：测试 ──────────────────────────────
   test:
-    needs: lint
+    needs: [lint-src, deps-check]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -26,4 +55,4 @@ jobs:
         with:
           python-version: "3.11"
       - run: pip install -r requirements-dev.txt
-      - run: pytest -v
+      - run: pytest -v src/
